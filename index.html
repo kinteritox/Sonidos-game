@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo Juego Sonidos</title>
+<style>
+  body {
+    margin: 0;
+    background: black;
+    color: white;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  #linternaBtn {
+    padding: 15px 30px;
+    margin-top: 20px;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background: #444;
+    color: white;
+    user-select: none;
+  }
+  #linternaBtn.active {
+    background: yellow;
+    color: black;
+  }
+  #mensaje {
+    margin-top: 20px;
+    font-size: 22px;
+    height: 30px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Habitación Oscura - Demo Sonidos</h1>
+<button id="linternaBtn">Encender Linterna</button>
+<div id="mensaje"></div>
+
+<audio id="pasosAudio" src="https://actions.google.com/sounds/v1/footsteps/footsteps_on_wood_2.ogg" preload="auto"></audio>
+<audio id="trampaAudio" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" preload="auto"></audio>
+
+<script>
+  const linternaBtn = document.getElementById('linternaBtn');
+  const mensaje = document.getElementById('mensaje');
+  const pasosAudio = document.getElementById('pasosAudio');
+  const trampaAudio = document.getElementById('trampaAudio');
+
+  let linternaEncendida = false;
+  let trampaActiva = false;
+
+  linternaBtn.addEventListener('click', () => {
+    linternaEncendida = !linternaEncendida;
+    linternaBtn.classList.toggle('active', linternaEncendida);
+    linternaBtn.textContent = linternaEncendida ? 'Apagar Linterna' : 'Encender Linterna';
+    mensaje.textContent = linternaEncendida ? 'Ves un poco mejor...' : '';
+  });
+
+  function activarTrampa() {
+    if (trampaActiva) return;
+    trampaActiva = true;
+    mensaje.textContent = '¡Trampa activada! Escucha y actúa rápido.';
+    trampaAudio.play();
+    setTimeout(() => {
+      trampaActiva = false;
+      mensaje.textContent = '';
+    }, 3000);
+  }
+
+  function pasosAsesino() {
+    if (!trampaActiva) {
+      pasosAudio.play();
+    }
+  }
+
+  setInterval(() => {
+    pasosAsesino();
+    if (Math.random() < 0.5) {
+      setTimeout(activarTrampa, 1500);
+    }
+  }, 7000);
+</script>
+
+</body>
+</html>
